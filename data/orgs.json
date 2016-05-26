@@ -3,12 +3,12 @@
   [
     {
       "name": "Alliance for Therapeutic Choice and Scientific Integrity",
-      "spectrum": "right",
+      "alignment": "right",
       "bias": "anti-trans"
     },
     {
       "name": "American College of Pediatricians",
-      "politics": "right",
+      "alignment": "right",
       "bias": "anti-trans"
     }
   ]

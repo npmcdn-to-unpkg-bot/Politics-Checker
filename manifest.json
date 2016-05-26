@@ -19,7 +19,10 @@
     {
       "matches": [ "http://*/*" ],
       "css": [ "stylesheets/style.css" ],
-      "js": [ "script/policheck.js" ]
+      "js": [
+        "script/zepto.min.js",
+        "script/policheck.js"
+      ]
     }
   ],
   "author": "Jay Billings"

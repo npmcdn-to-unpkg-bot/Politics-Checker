@@ -1,48 +1,54 @@
 /**
  * Created by jellyfish on 5/24/16.
  */
-var nodeIterator,
-    currentNode,
-    orgs;
-
-orgs = [
-    {
-        "name": "Alliance for Therapeutic Choice and Scientific Integrity",
-        "politics": "right",
-        "bias": "anti-trans"
-    },
-    {
-        "name": "American College of Pediatricians",
-        "politics": "right",
-        "bias": "anti-trans"
-    }
-];
 
 var checkBias = function() {
+    var nodeIterator,
+        currentNode,
+        orgs,
+        regex,
+        text,
+        match;
+
     nodeIterator = document.createNodeIterator(
         document.body,
         NodeFilter.SHOW_TEXT
     );
 
-    var regex, text;
+    $.getJSON('data/orgs.json', function (data, status) {
+        if (status === 'success') {
+            orgs = data.data;
 
-    while (currentNode = nodeIterator.nextNode()) {
-        for (var i = 0; i < orgs.length; i++) {
-            regex = createRegex(orgs[i]);
-            text = createTag(orgs[i]);
-            console.log(currentNode.textContent.search(regex));
-            currentNode.textContent = currentNode.textContent.replace(regex, text);
+            console.log(orgs);
+
+            while (currentNode = nodeIterator.nextNode()) {
+                for (var i = 0; i < orgs.length; i++) {
+                    regex = createRegex(orgs[i]);
+                    match = regex.exec(currentNode.textContent);
+
+                    if (match) {
+                        text = createTag(match[0], orgs[i]);
+                        currentNode.textContent = currentNode.textContent.replace(regex, text);
+                    }
+                }
+            }
         }
-    }
+    });
 };
 
 var createRegex = function( entry ) {
     return new RegExp(entry.name.toLowerCase(), "gi");
 };
 
-var createTag = function( entry ) {
-    var text = entry.name + " [ " + entry.politics + " ] ";
-    console.log(text);
+var createTag = function( matchedStr, entry ) {
+    var text;
+
+    text = matchedStr + " [ " + entry.alignment + " ] ";
+
+    if (entry.bias) {
+        text += " [ " + entry.bias + " ] ";
+    }
+
     return text;
 };
 
